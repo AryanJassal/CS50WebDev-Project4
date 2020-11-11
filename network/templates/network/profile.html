@@ -1,0 +1,78 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <div>
+        <h1 class="float-left">Profile: {{ user_.username }}</h1>
+
+        {% if user.username != user_.username %}
+            {% if following == True %}
+                <a href="{% url 'toggleFollowing' user_.username %}" class="btn btn-danger float-left ml-5 mt-2">Unfollow</a>
+            {% else %}
+                <a href="{% url 'toggleFollowing' user_.username %}" class="btn btn-primary float-left ml-5 mt-2">Follow</a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <br>
+
+    <div class="mt-5">
+        <h4>Followers: {{ followerNum }}</h4>
+        <h4>Following: {{ followingNum }}</h4>
+    </div>
+
+    <hr>
+
+    <h1>Posts by {{ user_.username }}</h1>
+
+    {% for post in posts %}
+        <div class="container-fluid mt-4">
+            <div class="row">
+                <div class="col">
+                    {% if post.modified %}
+                        <p class="username">Posted by <a class="username" href="{% url 'profile' post.user.username %}"><strong>{{ post.user.username }}</strong></a> on <strong>{{ post.timestamp }}</strong> modified on <strong>{{ post.modified }}</strong></p>
+                    {% else %}
+                        <p class="username">Posted by <a class="username" href="{% url 'profile' post.user.username %}"><strong>{{ post.user.username }}</strong></a> on <strong>{{ post.timestamp }}</strong></p>
+                    {% endif %}
+                    <div class="links ">
+                        {% if user.is_authenticated %}
+                        <button data-id="{{ post.id }}" class="btn btn-default like-button shadow-none fa fa-heart" style="color: red;">{{ post.likes }}</button>
+
+                            {% if post.user.username == user.username %}
+                                <button data-id="{{ post.id }}" class="btn btn-link edit-button">Edit</button>
+                                <button data-id="{{ post.id }}" class="btn btn-link delete-button" style="color: red;">Delete</button>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <div class="post-body" style="white-space: pre-wrap;">{{ post.content }}</div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <h2>This user hasn't posted anything yet.</h2>
+    {% endfor %}
+
+    {% if posts %}
+        <ul class="pagination justify-content-center mt-5">
+            {% if posts.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a></li>
+            {% else %}
+                <li class="page-item disabled"><a class="page-link" href="?page=1">&laquo; First</a></li>
+                <li class="page-item disabled"><a class="page-link" href="?page=1">Previous</a></li>
+            {% endif %}
+
+            <span class="current mx-3 pt-1">
+                Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+            </span>
+
+            {% if posts.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ posts.paginator.num_pages }}">&raquo; Last</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Next</a></li>
+            {% else %}
+                <li class="page-item disabled"><a class="page-link" href="?page={{ posts.paginator.num_pages }}">&raquo; Last</a></li>
+                <li class="page-item disabled"><a class="page-link" href="?page={{ posts.paginator.num_pages }}">Next</a></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+{% endblock body %}

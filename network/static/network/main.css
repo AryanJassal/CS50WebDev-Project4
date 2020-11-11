@@ -1,0 +1,36 @@
+.body
+{
+    padding: 10px;
+}
+
+.username
+{
+    top: 0;
+    left: 0;
+    color: gray;
+    font-size: 15px;
+    margin-bottom: 0;
+}
+
+.row
+{
+    height: 200px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+.delete-button
+{
+    color: red;
+}
+
+.delete-button:hover
+{
+    color: indianred !important;
+}
+
+.like-button
+{
+    outline: none !important;
+    border: none !important;
+}
