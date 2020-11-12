@@ -15,7 +15,7 @@ class Posts(models.Model):
     modified = models.DateTimeField(default=None, null=True)
 
     class Meta:
-        ordering = ['-timestamp']
+        ordering = ['-id']
         verbose_name_plural = 'Posts'
 
 
