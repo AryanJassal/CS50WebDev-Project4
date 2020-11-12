@@ -39,6 +39,8 @@
                                 <button data-id="{{ post.id }}" class="btn btn-link edit-button">Edit</button>
                                 <button data-id="{{ post.id }}" class="btn btn-link delete-button" style="color: red;">Delete</button>
                             {% endif %}
+                        {% else %}
+                            <p><a href="{% url 'login' %}" class="pl-2">Login</a> to like this post.</p>
                         {% endif %}
                     </div>
 
