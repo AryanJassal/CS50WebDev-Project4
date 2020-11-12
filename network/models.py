@@ -9,7 +9,7 @@ class User(AbstractUser):
 
 class Posts(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.CharField(max_length=255)
+    content = models.TextField()
     likes = models.IntegerField(default=0)
     timestamp = models.DateTimeField(default=datetime.now(), editable=False)
     modified = models.DateTimeField(default=None, null=True)
