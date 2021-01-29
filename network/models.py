@@ -11,7 +11,7 @@ class Posts(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     likes = models.IntegerField(default=0)
-    timestamp = models.DateTimeField(default=datetime.now(), editable=False)
+    timestamp = models.DateTimeField(auto_now_add=True, editable=False)
     modified = models.DateTimeField(default=None, null=True)
 
     class Meta:

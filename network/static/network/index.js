@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () =>
          formGroup1.classList.add('form-group');
 
          const formGroup2 = document.createElement('div');
-         formGroup2.classList.add('form-group');
+         formGroup2.classList.add('form-group', 'm-0');
 
          const textarea = document.createElement('textarea');
          textarea.rows = 4;
@@ -58,6 +58,12 @@ document.addEventListener('DOMContentLoaded', () =>
 
          const br = document.createElement('br');
 
+         const h4 = document.createElement('h3');
+         h4.innerText = 'Edit your post:';
+         h4.classList.add('mb-2');
+         h4.style.marginTop = '-10px';
+
+         form.appendChild(h4);
          formGroup1.appendChild(textarea);
          form.appendChild(formGroup1);
          formGroup2.appendChild(submit);
@@ -121,14 +127,12 @@ hasLiked = function(button)
           if (data.status === 0)
           {
              button.classList.remove('fa', 'fa-heart');
-             button.classList.add('far', 'fa-heart');
-             console.log('status: 0; not liked');
+             button.classList.add('fa', 'fa-heart-o');
           }
           else if (data.status === 1)
           {
-             button.classList.remove('far', 'fa-heart');
+             button.classList.remove('fa', 'fa-heart-o');
              button.classList.add('fa', 'fa-heart');
-             console.log('status: 1; liked');
           }
        });
 }

@@ -1,7 +1,7 @@
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.paginator import Paginator
 from datetime import datetime
@@ -24,17 +24,21 @@ def index(request):
 
 def login_(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse('index'))
+
+            return redirect('index')
         else:
+            errors = ['Invalid username and/or password.']
+
+        if errors:
             return render(request, 'network/login.html', {
-                'message': 'Invalid username and/or password.'
+                'errors': errors
             })
     else:
         return render(request, 'network/login.html')
@@ -42,42 +46,35 @@ def login_(request):
 
 def logout_(request):
     logout(request)
-    return HttpResponseRedirect(reverse('index'))
+
+    return redirect('index')
 
 
 def register(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        confirmPassword = request.POST['confirmPassword']
-
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        confirm = request.POST.get('confirm')
         email = 'someone@emailprovider.com'
+        errors = []
 
-        if password != confirmPassword:
+        if password != confirm:
+            errors.append('The passwords do not match.')
+
+        if User.objects.filter(username=username).exists():
+            errors.append('A user with the provided username already exists.')
+
+        if errors:
             return render(request, 'network/register.html', {
-                'message': 'The passwords do not match.'
+                'errors': errors
             })
 
-        if len(password) < 6:
-            return render(request, 'network/register.html', {
-                'message': 'The password must be atleast 6 characters long.'
-            })
-
-        if len(username) > 32:
-            return render(request, 'network/register.html', {
-                'message': 'The selected username is too long. (max 32 characters)'
-            })
-
-        try:
-            user = User.objects.create_user(username, email, password)
-            user.save()
-        except IntegrityError:
-            return render(request, 'network/register.html', {
-                'message': 'The username is already taken.'
-            })
+        user = User.objects.create_user(username=username, email=email, password=password)
+        user.save()
 
         login(request, user)
-        return HttpResponseRedirect(reverse('index'))
+
+        return redirect('index')
 
     else:
         return render(request, 'network/register.html')
@@ -86,7 +83,7 @@ def register(request):
 def newPost(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            content = request.POST['content']
+            content = request.POST.get('content')
 
             post = Posts(
                 user=request.user,
@@ -96,11 +93,11 @@ def newPost(request):
 
             post.save()
 
-            return HttpResponseRedirect(reverse('index'))
+            return redirect('index')
         else:
-            return HttpResponseRedirect(reverse('index'))
+            return redirect('index')
     else:
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
 
 
 def following(request):
@@ -119,7 +116,7 @@ def following(request):
             'posts': posts
         })
     else:
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
 
 
 def likePost(request):
@@ -150,9 +147,9 @@ def likePost(request):
                 'likes': Posts.objects.get(pk=data['postID']).likes
             }))
         else:
-            return HttpResponseRedirect(reverse('index'))
+            return redirect('index')
     else:
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
 
 
 def profile(request, username):
@@ -174,7 +171,7 @@ def profile(request, username):
             'posts': Posts.objects.filter(user=user_)
         })
     else:
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
 
 
 def toggleFollowing(request, username):
@@ -192,9 +189,9 @@ def toggleFollowing(request, username):
             )
             newFollow.save()
 
-        return HttpResponseRedirect(reverse('profile', kwargs={'username': user}))
+        return redirect('profile', username=username)
     else:
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
 
 
 def editPost(request):
@@ -211,9 +208,9 @@ def editPost(request):
 
             return HttpResponse('Post edited.')
         else:
-            return HttpResponseRedirect(reverse('index'))
+            return redirect('index')
     else:
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
 
 
 def deletePost(request):
@@ -227,9 +224,9 @@ def deletePost(request):
 
             return HttpResponse('Deleted')
         else:
-            return HttpResponseRedirect(reverse('index'))
+            return redirect('index')
     else:
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
 
 
 def haveLiked(request):
@@ -249,5 +246,5 @@ def haveLiked(request):
             }))
 
     else:
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
 

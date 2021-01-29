@@ -5,9 +5,11 @@
     <head>
         <title>{% block title %}Social Network{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="{% static 'network/main.css' %}" rel="stylesheet">
 
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
         <script src="{% static 'network/index.js' %}"></script>
         <script>
             let csrf_token = '{{ csrf_token }}';
@@ -18,31 +20,35 @@
         </script>
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{% url 'index' %}">Network</a>
+        <nav class="navbar navbar-default navbar-light navbar-expand-lg fixed-top">
+            <div class="navbar-header">
+                <a class="navbar-brand mx-auto" href="{% url 'index' %}" style="color: black !important;">Network</a>
 
-            <div>
-                <ul class="navbar-nav mr-auto">
-                    {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'profile' user.username %}"><strong>{{ user.username }}</strong></a></li>
+                <button class="navbar-toggler pull-right" type="button" data-toggle="collapse" data-target="#navbar-content">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-content">
+                <ul class="navbar-nav ml-3">
+                    <li class="nav-item mx-1"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
+                    {% if user.is_superuser %}
+                        <li class="nav-item mx-1"><a class="nav-link" href="{% url 'admin:index' %}">Admin</a></li>
                     {% endif %}
 
-                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">All Posts</a></li>
-
                     {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link btn btn-default" href="{% url 'following' %}">Following</a></li>
-                        <li class="nav-item"><a class="nav-link btn btn-default" href="{% url 'logout' %}">Log Out</a></li>
+                        <li class="nav-item mx-1"><a class="nav-link" href="{% url 'following' %}">Following</a></li>
+                        <li class="nav-item mx-1"><a class="nav-link" id="my-profile" href="{% url 'profile' user.username %}">My Profile</a></li>
+                        <li class="nav-item mx-1"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link btn btn-default" href="{% url 'login' %}">Log In</a></li>
-                        <li class="nav-item"><a class="nav-link btn btn-default" href="{% url 'register' %}">Register</a></li>
+                        <li class="nav-item mx-1"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                        <li class="nav-item mx-1"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
                     {% endif %}
                 </ul>
             </div>
         </nav>
-
-        <div class="body px-4">
+        <div class="body mx-2" style="margin-top: 4rem;">
             {% block body %}
-            {% endblock %}
+            {% endblock body %}
         </div>
     </body>
 </html>

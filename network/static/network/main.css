@@ -1,3 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Arvo&family=Titillium+Web:wght@300;400&family=PT+Sans&family=Noto+Sans+JP:wght@500&display=swap');
+
+nav { background-color: #eee; }
+
+h1, h2, h3, h4, h5 { font-family: 'PT Sans', sans-serif; font-weight: 600; }
+
+h6 { font-family: 'Noto Sans JP', sans-serif; font-size: 17px; }
+
+.navbar-brand
+{
+    text-decoration: none;
+    font-weight: 500;
+    background-color: transparent !important;
+    font-family: 'Arvo', serif;
+}
+
+.require { color: #ff0000; }
+
+.form-label { font-weight: 600; }
+
+.navbar-brand:hover { color: black; }
+
+.nav-link
+{
+    background-color: #eee;
+    color: #333 !important;
+    transition: background-color .2s, color .2s;
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: 400;
+    padding-left: 5px !important;
+}
+
+.nav-link:hover, .nav-link:active
+{
+    background-color: #ccc;
+    color: #222;
+}
+
+.title
+{
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+}
+
+.login-title
+{
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.login-container
+{
+    border-radius: 4px;
+    border: 1px solid #9f9f9f;
+    background-color: #eee;
+    transition: box-shadow .2s;
+}
+
+.login-container:focus-within { box-shadow: 0 0 7px 2px #ccc; }
+
 .body
 {
     padding: 10px;
@@ -12,7 +73,7 @@
     margin-bottom: 0;
 }
 
-.row
+.general-row
 {
     min-height: 200px;
     border: 1px solid lightgray;
